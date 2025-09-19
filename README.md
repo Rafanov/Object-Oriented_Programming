@@ -120,6 +120,8 @@ Main.java berisi program untuk mengeksekusi program yang ada di dalam Class Main
 import java.util.ArrayList;
 import java.util.Scanner;
 import Model.Model;
+import Model.TiketDomestik;
+import Model.TiketInternasional;
 ```
 
 - import java.util.ArrayList digunakan untuk memanggil sebuah fungsi yang digunakan sebagai
@@ -129,6 +131,10 @@ database sementara.
 - Scanner digunakan untuk mengambil input dari user.
 
 - Import Model digunakan untuk memanggil Class Model yang mendeklarasikan Variable.
+
+- Import Model TiketDomestik untuk memanggil data dari Class TiketDomestik
+
+- Import Model TiketInternasional untuk memanggil data dari Class TiketInternasional
 
 
 
@@ -222,34 +228,45 @@ Jika kosong sistem akan memberi tahu bahwa tiket belum tersedia.
 ```bash
     public static void tambahTiket() {
         System.out.println("=== TAMBAH TIKET ===");
+        System.out.print("Jenis Tiket (1 = Domestik, 2 = Internasional): ");
+        String jenis = Scanner.nextLine().trim();
 
         System.out.print("Kode Penerbangan: ");
-        String kodePenerbangan = Scanner.nextLine();
+        String kode = Scanner.nextLine();
 
         System.out.print("Maskapai: ");
-        String Maskapai = Scanner.nextLine();
+        String maskapai = Scanner.nextLine();
 
-        System.out.print("Tujuan: ");
+        System.out.print("Bandara Asal: ");
         String asal = Scanner.nextLine();
-        
-        System.out.print("Tujuan: ");
+
+        System.out.print("Bandara Tujuan: ");
         String tujuan = Scanner.nextLine();
 
         System.out.print("Armada Pesawat: ");
-        String Armada = Scanner.nextLine();
+        String armada = Scanner.nextLine();
 
-        Model tiketBaru = new Model(kodePenerbangan, Maskapai, asal, tujuan, Armada);
+        Model tiketBaru;
+
+        if (jenis.equals("2")) {
+            System.out.print("Negara Tujuan: ");
+            String negara = Scanner.nextLine();
+            tiketBaru = new TiketInternasional(kode, maskapai, asal, tujuan, armada, negara);
+        } else {
+            tiketBaru = new TiketDomestik(kode, maskapai, asal, tujuan, armada);
+        }
 
         daftarTiket.add(tiketBaru);
-
         System.out.println("Tiket berhasil ditambahkan!");
         System.out.println("Tekan Enter untuk kembali...");
-       Scanner.nextLine();
+        Scanner.nextLine();
     }
 ``` 
 
 
 Method ini memungkinkan user menambahkan tiket baru dengan memasukkan kode penerbangan, maskapai, tujuan, terminal, dan armada.
+
+Method kali ini memungkinkan user untuk memilih jenis tiket antara domestik dan internasional.
 
 
 
@@ -260,55 +277,67 @@ Method ini memungkinkan user menambahkan tiket baru dengan memasukkan kode pener
 ```bash
     public static void editTiket() {
         System.out.println("========= EDIT TIKET ==========");
-        
+
         if (daftarTiket.isEmpty()) {
-            System.out.println("Tiket Tidak Tersedia!");
+            System.out.println("Belum ada tiket yang bisa diedit.");
             System.out.println("Tekan Enter untuk kembali...");
             Scanner.nextLine();
             return;
         }
-        
+
         for (int i = 0; i < daftarTiket.size(); i++) {
             System.out.println((i + 1) + ". " + daftarTiket.get(i));
         }
-        
-        System.out.println("Pilih tiket yang ingin diedit: ");
+
+        System.out.print("Pilih nomor tiket yang ingin diedit: ");
         int nomor = Scanner.nextInt();
         Scanner.nextLine();
-        
+
         if (nomor < 1 || nomor > daftarTiket.size()) {
-            System.out.println("Nomor tiket tidak valid");
+            System.out.println("Nomor tidak valid.");
             System.out.println("Tekan Enter untuk kembali...");
             Scanner.nextLine();
             return;
-        }       
-        
-        System.out.println("========= Edit Data Tiket ============");
-        
-        System.out.print("Kode Penerbangan Baru: ");
-        String kodeBaru = Scanner.nextLine();
-        
-        System.out.print("Maskapai Baru: ");
-        String maskapaiBaru = Scanner.nextLine();
-        
-        System.out.print("Tujuan Baru: ");
-        String asalBaru =Scanner.nextLine();
-        
-        System.out.print("Tujuan Baru: ");
-        String tujuanBaru =Scanner.nextLine();
-        
-        System.out.print("Armada Baru: ");
-        String armadaBaru = Scanner.nextLine();
+        }
 
-        
-        Model tiketBaru = new Model(kodeBaru, maskapaiBaru, tujuanBaru, asalBaru, armadaBaru);
+        Model tiketLama = daftarTiket.get(nomor - 1);
+        System.out.println("Jenis Tiket Lama: " + tiketLama.getJenis());
+
+        System.out.print("Jenis Tiket Baru (1 = Domestik, 2 = Internasional): ");
+        String jenis = Scanner.nextLine().trim();
+
+        System.out.println("=== Masukkan Data Baru ===");
+        System.out.print("Kode Penerbangan: ");
+        String kode = Scanner.nextLine();
+
+        System.out.print("Maskapai: ");
+        String maskapai = Scanner.nextLine();
+
+        System.out.print("Bandara Asal: ");
+        String asal = Scanner.nextLine();
+
+        System.out.print("Bandara Tujuan: ");
+        String tujuan = Scanner.nextLine();
+
+        System.out.print("Armada: ");
+        String armada = Scanner.nextLine();
+
+        Model tiketBaru;
+
+        if (jenis.equals("2")) {
+            System.out.print("Negara Tujuan: ");
+            String negara = Scanner.nextLine();
+            tiketBaru = new TiketInternasional(kode, maskapai, asal, tujuan, armada, negara);
+        } else {
+            tiketBaru = new TiketDomestik(kode, maskapai, asal, tujuan, armada);
+        }
 
         daftarTiket.set(nomor - 1, tiketBaru);
 
-        System.out.println("Tiket berhasil diupdate.");
+        System.out.println("Tiket berhasil diedit!");
+        System.out.println("Jenis Tiket Baru: " + tiketBaru.getJenis());
         System.out.println("Tekan Enter untuk kembali...");
         Scanner.nextLine();
-        menuUtama();
     }
 ```
 
@@ -394,12 +423,13 @@ dalam database yang lebih kompleks
 
 ```bash
     public static void initDaftarTiket() {
-        daftarTiket.add(new Model("JT123", "Garuda Indonesia", "Balikpapan", "Jakarta", "Boeing 737"));
-        daftarTiket.add(new Model("JT456", "Lion Air", "Balikpapan", "Surabaya", "Airbus A320"));
-        daftarTiket.add(new Model("JT789", "Citilink", "Balikpapan", "Bali", "ATR 72"));
-        daftarTiket.add(new Model("JT012", "AirAsia", "Balikpapan", "Yogyakarta", "Airbus A320neo"));
-        daftarTiket.add(new Model("JT345", "Super Air Jet", "Balikpapan", "Medan", "Boeing 737-800"));
-    }
+        daftarTiket.add(new TiketDomestik("JT123", "Garuda Indonesia", "Balikpapan", "Jakarta", "Boeing 737"));
+        daftarTiket.add(new TiketDomestik("JT456", "Lion Air", "Balikpapan", "Surabaya", "Airbus A320"));
+        daftarTiket.add(new TiketDomestik("JT789", "Citilink", "Balikpapan", "Bali", "ATR 72"));
+        daftarTiket.add(new TiketInternasional("JT012", "AirAsia", "Balikpapan", "Kuala Lumpur", "Airbus A320neo", "Malaysia"));
+        daftarTiket.add(new TiketDomestik("JT345", "Super Air Jet", "Balikpapan", "Medan", "Boeing 737-800"));
+        daftarTiket.add(new TiketDomestik("JT123", "Garuda Indonesia", "Balikpapan", "Jakarta", "Boeing 737"));
+        daftarTiket.add(new TiketInternasional("INT456", "Singapore Airlines", "Jakarta", "Singapore", "Airbus A350", "Singapura"));
 ```
 
 Method ini berfungsi untuk menambahkan beberapa data tiket default ke dalam sistem agar user langsung bisa mencoba fitur-fitur program.
@@ -474,11 +504,42 @@ Construct digunakan untuk menginisialisasi nilai awal dari sebuah variable.
     public String getArmada() {
     return armada;
     }
+
+    public String getJenis() {
+    return "Lmao Kang";
+    }
 ```
 
 Getter adalah method yang dipakai untuk mengambil atau membaca nilai variabel (field) private dari sebuah class.
 
-#### Override
+#### E. Setter
+
+```bash
+    public void setKodePenerbangan(String kodePenerbangan) {
+        this.kodePenerbangan = kodePenerbangan;
+    }
+
+    public void setMaskapai(String maskapai) {
+        this.maskapai = maskapai;
+    }
+
+    public void setAsal(String asal) {
+        this.asal = asal;
+    }
+
+    public void setTujuan(String tujuan) {
+        this.tujuan = tujuan;
+    }
+
+    public void setArmada(String armada) {
+        this.armada = armada;
+    }
+    
+```
+
+Setter Berfungsi untuk mengembalikkan sebuah data. 
+
+#### F. Override
 
 ```bash
     @Override
@@ -494,7 +555,91 @@ Getter adalah method yang dipakai untuk mengambil atau membaca nilai variabel (f
 
 Method Override berfungsi untuk mengubah tampilan default objek menjadi lebih informatif sesuai kebutuhan, sehingga memudahkan saat dicetak atau di-debug.
 
+### 4. TiketDomestik
 
+Class TiketDomestik adalah anak dari Class Model, Class TiketDomestik mendeklarasikan sebuah jenis tiket penerbangan antar pulau.
+
+Penerbangan Domestik adalah jenis penerbangan yang masih di dalam lingkup negara.
+
+#### A. Deklarasi Variable
+
+```bash
+public class TiketDomestik extends Model {
+    private String kategori = "Domestik";
+```
+
+Variabel yang dideklarasikan di dalam kode ini adalah variabel kategori, kategori Class ini merujuk pada jenis tiket Domestik.
+
+#### B. Construct
+
+```bash
+    public TiketDomestik(String kode, String maskapai, String asal, String tujuan, String armada) {
+        super(kode, maskapai, asal, tujuan, armada);
+    }
+```
+
+Construct di dalam kode ini berguna untuk mengembalikkan nilai dari data yang sudah ada di dalam Class Model sebelumnya.
+
+#### C. Override
+
+```bash
+    @Override
+    public String toString() {
+        return super.toString() + " " + " Kategori: " + kategori;
+    }
+    
+    @Override
+    public String getJenis() {
+        return "Domestik";
+    }
+```
+
+Method Override berfungsi untuk mengubah tampilan default objek menjadi lebih informatif sesuai kebutuhan, sehingga memudahkan saat dicetak atau di-debug.
+
+
+### 5. TiketInternasional
+
+Class TiketDomestik adalah anak dari Class Model, Class TiketDomestik mendeklarasikan sebuah jenis tiket penerbangan antar pulau.
+
+#### A. Deklarasi Variabel
+
+```bash
+public class TiketInternasional extends Model {
+    private String kategori = "Internasional";
+    private String negaraTujuan;
+```
+
+Variabel yang dideklarasikan di dalam kode ini adalah kategori dan negaraTujuan untuk menandakan bahwasannya ini merupakan penerbangan Internasional.
+
+
+#### B. Construct
+
+```bash
+    public TiketInternasional(String kode, String maskapai, String asal, String tujuan, String armada, String negaraTujuan) {
+        super(kode, maskapai, asal, tujuan, armada);
+        this.negaraTujuan = negaraTujuan;
+    }
+```
+
+Construct di dalam kode ini berguna untuk mengembalikkan nilai dari data yang sudah ada di dalam Class Model sebelumnya.
+
+Namun, di dalam kode ini Construct juga mengembalikkan data dari variabel negaraTujuan
+
+
+#### C. Override
+
+```bash
+    @Override
+    public String toString() {
+        return super.toString() + " " + "Kategori: " + kategori + ", Negara Tujuan: " + negaraTujuan;
+    }
+    @Override
+    public String getJenis() {
+        return "Internasional";
+    }   
+```
+
+Method Override berfungsi untuk mengubah tampilan default objek menjadi lebih informatif sesuai kebutuhan, sehingga memudahkan saat dicetak atau di-debug.
 
 
 ## Alur Program Sederhana
@@ -544,10 +689,7 @@ Jika memilih 6 (Keluar) maka program akan berhenti.
 
 Jika user memasukkan pilihan yang tidak valid, sistem akan menampilkan pesan error dan kembali ke menu utama.
 
-
-
-
-### 4. Penerapan MVC
+### 6. Penerapan MVC
 
 Apa itu MVC? MVC atau Model View Control adalahsalah satu pola arsitektur (design pattern) yang digunakan dalam pengembangan perangkat lunak.
 Tujuan utama MVC adalah memisahkan logika program menjadi tiga bagian utama agar kode lebih rapi, terstruktur, mudah dipelihara, dan fleksibel untuk dikembangkan.
