@@ -555,7 +555,7 @@ Setter Berfungsi untuk mengembalikkan sebuah data.
 
 Method Override berfungsi untuk mengubah tampilan default objek menjadi lebih informatif sesuai kebutuhan, sehingga memudahkan saat dicetak atau di-debug.
 
-### 4. TiketDomestik
+### 4. TiketDomestik (inheritance)
 
 Class TiketDomestik adalah anak dari Class Model, Class TiketDomestik mendeklarasikan sebuah jenis tiket penerbangan antar pulau.
 
@@ -597,7 +597,7 @@ Construct di dalam kode ini berguna untuk mengembalikkan nilai dari data yang su
 Method Override berfungsi untuk mengubah tampilan default objek menjadi lebih informatif sesuai kebutuhan, sehingga memudahkan saat dicetak atau di-debug.
 
 
-### 5. TiketInternasional
+### 5. TiketInternasional (inheritance)
 
 Class TiketDomestik adalah anak dari Class Model, Class TiketDomestik mendeklarasikan sebuah jenis tiket penerbangan antar pulau.
 
